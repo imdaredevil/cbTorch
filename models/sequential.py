@@ -1,4 +1,7 @@
-class Sequential(object):
+from layers import Dropout
+from .module import Module
+
+class Sequential(Module):
     def __init__(self, *args):
         """
         Sequential Object to serialize the NN layers
@@ -69,3 +72,20 @@ class Sequential(object):
                     print(
                         f"Loading Params: {n} Shape: {layer.params[n].shape}"
                     )
+    
+    
+    def forward(self, feat, is_training=True, seed=None):
+        output = feat
+        for layer in self.layers:
+            if isinstance(layer, Dropout):
+                output = layer.forward(output, is_training, seed)
+            else:
+                output = layer.forward(output)
+        self.gather_params()
+        return output
+
+    def backward(self, dprev):
+        for layer in self.layers[::-1]:
+            dprev = layer.backward(dprev)
+        self.gather_grads()
+        return dprev
