@@ -2,6 +2,7 @@ from .tokenizer import Tokenizer
 from typing import List, Tuple
 from pyllist import dllist
 import tqdm
+import pickle as pkl
 
 class BPETokenizer(Tokenizer):
     def __init__(self, unicode_encoding = "utf-8"):
@@ -76,7 +77,7 @@ class BPETokenizer(Tokenizer):
                     
     def tokenize(self, data: List[str], to_list = True):
         linkedlist_data = []
-        for sentence in tqdm.tqdm(data):
+        for sentence in data:
             sentence_bytes = sentence.encode(self.unicode_encoding)
             sentence_bytes = [bytes([byte]) for byte in sentence_bytes]
             curr_ll = dllist(sentence_bytes)
@@ -156,7 +157,7 @@ class BPETokenizer(Tokenizer):
             sentence_bytes = [
                 sentence.decode(self.unicode_encoding) for sentence in sentence_bytes
             ]
-        return sentence_bytes   
-            
+        return sentence_bytes
+        
         
                 

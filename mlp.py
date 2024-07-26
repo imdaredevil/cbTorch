@@ -1,5 +1,5 @@
 from models import Module, Sequential
-from layers import Flatten, FC
+from layers import Flatten, FC, Residual
 from loss import Loss, CrossEntropyWithLogits
 from activations import LeakyRelu
 from optimizers import Optimizer, Adam
@@ -35,8 +35,13 @@ model = Sequential(
             Flatten(name="flat"),
             FC(2, 100, 5e-2, name="fc1"),
             LeakyRelu(name="relu1"),
-            FC(100, 100, 5e-2, name="fc2"),
-            LeakyRelu(name="relu2"),
+            Residual(
+                Sequential(
+                    FC(100, 100, 5e-2, name="fc2"),
+                    LeakyRelu(name="relu2"),
+                    name = "res"
+                )   
+            ),
             FC(100, 100, 5e-2, name="fc3"),
             LeakyRelu(name="relu3"),
             FC(100, 100, 5e-2, name="fc4"),

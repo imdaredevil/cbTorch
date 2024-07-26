@@ -2,11 +2,12 @@ from layers import Dropout
 from .module import Module
 
 class Sequential(Module):
-    def __init__(self, *args):
+    def __init__(self, *args, name = "sequential"):
         """
         Sequential Object to serialize the NN layers
         Please read this code block and understand how it works
         """
+        self.name = name
         self.params = {}
         self.grads = {}
         self.layers = []
